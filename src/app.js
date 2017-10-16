@@ -62,3 +62,16 @@ store.dispatch({
         title: "Updated Title"
     }
 })
+
+// CART ACTIONS
+// DELETE a cart based on id
+store.dispatch({
+    type: "DELETE_CART",
+    payload: { id: 1 }
+})
+
+// ADD to cart
+store.dispatch({
+    type: "ADD_TO_CART",
+    payload: [{ id: 2 }]
+})
