@@ -70,65 +70,16 @@
 "use strict";
 
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _redux = __webpack_require__(8);
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _index = __webpack_require__(24);
 
-// STEP 3 define the reducers
-var reducer = function reducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
-    var action = arguments[1];
+var _index2 = _interopRequireDefault(_index);
 
-    // if the action type is increment we will update the state, adding the payload
-    // also have to set the initial value of ths state (= 0) or we wont be able to add any payload
-    switch (action.type) {
-        // case "INCREMENT":
-        //     return state + action.payload;
-        //     break;
-        case "POST_BOOK":
-            // never use push to concatonate b/c push is a mutable method and in Redux you should never mutate the state
-            //let books = state.books.concat(action.payload);
-            // can also use the spread operator ...
-            return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
-            break;
-
-        case "DELETE_BOOK":
-            // create a copy of the current array of books
-            var currentBooksArray = [].concat(_toConsumableArray(state.books));
-            // determine at which index in books array is the book to delete
-            var indexToDelete = currentBooksArray.findIndex(function (book) {
-                return book.id === action.payload.id;
-            });
-
-            // then use slice to remove the book from the state object at the specified index in the array
-            return {
-                books: [].concat(_toConsumableArray(currentBooksArray.slice(0, indexToDelete)), _toConsumableArray(currentBooksArray.slice(indexToDelete + 1)))
-            };
-            break;
-
-        case "UPDATE_BOOK":
-            // create a copy of the current array of books
-            var currentBookToUpdate = [].concat(_toConsumableArray(state.books));
-            // determine the index in the books array to be updated
-            var indexToUpdate = currentBookToUpdate.findIndex(function (book) {
-                return book.id === action.payload.id;
-            });
-            // create new book object with the new values and with the same array index of the item we want to replace, to do thsi we use spread but can use concat too
-            var newBookToUpdate = _extends({}, currentBookToUpdate[indexToUpdate], {
-                title: action.payload.title
-                // this log shows what the new item has
-            });console.log("newBookToUpdate: ", newBookToUpdate);
-            // use slice to remove the book at the specified index, replace with the new object and concatenate with the other items
-            return { books: [].concat(_toConsumableArray(currentBookToUpdate.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBookToUpdate.slice(indexToUpdate + 1))) };
-            break;
-    }
-    return state;
-};
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // STEP 1 create the store
-var store = (0, _redux.createStore)(reducer);
+var store = (0, _redux.createStore)(_index2.default);
 
 store.subscribe(function () {
     console.log('Current state is: ', store.getState());
@@ -1420,6 +1371,97 @@ function applyMiddleware() {
       });
     };
   };
+}
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _redux = __webpack_require__(8);
+
+var _booksReducers = __webpack_require__(25);
+
+// COMBINE THE REDUCERS
+exports.default = (0, _redux.combineReducers)({
+    books: _booksReducers.booksReducers
+
+});
+
+// IMPORT REDUCERS TO BE COMBINED
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// BOOKS REDUCERS
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.booksReducers = booksReducers;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function booksReducers() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
+    var action = arguments[1];
+
+    // if the action type is increment we will update the state, adding the payload
+    // also have to set the initial value of ths state (= 0) or we wont be able to add any payload
+    switch (action.type) {
+        // case "INCREMENT":
+        //     return state + action.payload;
+        //     break;
+        case "POST_BOOK":
+            // never use push to concatonate b/c push is a mutable method and in Redux you should never mutate the state
+            //let books = state.books.concat(action.payload);
+            // can also use the spread operator ...
+            return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
+            break;
+
+        case "DELETE_BOOK":
+            // create a copy of the current array of books
+            var currentBooksArray = [].concat(_toConsumableArray(state.books));
+            // determine at which index in books array is the book to delete
+            var indexToDelete = currentBooksArray.findIndex(function (book) {
+                return book.id === action.payload.id;
+            });
+
+            // then use slice to remove the book from the state object at the specified index in the array
+            return {
+                books: [].concat(_toConsumableArray(currentBooksArray.slice(0, indexToDelete)), _toConsumableArray(currentBooksArray.slice(indexToDelete + 1)))
+            };
+            break;
+
+        case "UPDATE_BOOK":
+            // create a copy of the current array of books
+            var currentBookToUpdate = [].concat(_toConsumableArray(state.books));
+            // determine the index in the books array to be updated
+            var indexToUpdate = currentBookToUpdate.findIndex(function (book) {
+                return book.id === action.payload.id;
+            });
+            // create new book object with the new values and with the same array index of the item we want to replace, to do thsi we use spread but can use concat too
+            var newBookToUpdate = _extends({}, currentBookToUpdate[indexToUpdate], {
+                title: action.payload.title
+                // this log shows what the new item has
+            });console.log("newBookToUpdate: ", newBookToUpdate);
+            // use slice to remove the book at the specified index, replace with the new object and concatenate with the other items
+            return { books: [].concat(_toConsumableArray(currentBookToUpdate.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBookToUpdate.slice(indexToUpdate + 1))) };
+            break;
+    }
+    return state;
 }
 
 /***/ })
