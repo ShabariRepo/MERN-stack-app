@@ -2,7 +2,7 @@
 import { createStore } from 'redux';
 
 // STEP 3 define the reducers
-const reducer = function (state = {}, action) {
+const reducer = function (state = [], action) {
     // if the action type is increment we will update the state, adding the payload
     // also have to set the initial value of ths state (= 0) or we wont be able to add any payload
     switch (action.type) {
@@ -10,8 +10,8 @@ const reducer = function (state = {}, action) {
         //     return state + action.payload;
         //     break;
         case "POST_BOOK":
-        return state = action.payload;
-        break;
+            return state = action.payload;
+            break;
     }
     return state;
 }
@@ -20,7 +20,9 @@ const reducer = function (state = {}, action) {
 const store = createStore(reducer);
 
 store.subscribe(function () {
-    console.log('Current state is: ' , store.getState());
+    console.log('Current state is: ', store.getState());
+    // can look at just the price of an object in the payload from the getState()
+    console.log('Current state is: ', store.getState()[1].price);
 })
 
 // STEP 2 create and dispatch actions
@@ -32,10 +34,18 @@ for passing an object in the payload you will have to change the state assignati
 and make the state = payload instead of + and change the console log from + to comma
 */
 store.dispatch({
-    type: "POST_BOOK", payload: {
-        id: 1,
-        name: "object in the payload",
-        title: "this is first payload..",
-        price: 3
-    }
+    type: "POST_BOOK", payload: [
+        {
+            id: 1,
+            name: "first book object in the payload",
+            title: "this is first book in payload array of objs..",
+            price: 3
+        },
+        {
+            id: 2,
+            name: "second book object in the payload",
+            title: "this is second book in payload array of objs..",
+            price: 24.99
+        }
+    ]
 });
