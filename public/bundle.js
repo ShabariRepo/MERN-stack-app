@@ -84,7 +84,9 @@ var reducer = function reducer() {
         //     return state + action.payload;
         //     break;
         case "POST_BOOK":
-            return state = action.payload;
+            // never use push to concatonate b/c push is a mutable method and in Redux you should never mutate the state
+            var books = state.concat(action.payload);
+            return books;
             break;
     }
     return state;
@@ -118,6 +120,16 @@ store.dispatch({
         name: "second book object in the payload",
         title: "this is second book in payload array of objs..",
         price: 24.99
+    }]
+});
+// if you dispatch a third book object then the state will be over written by the third book
+// but to append new data you will have to add the payload and concatonate them together
+store.dispatch({
+    type: "POST_BOOK", payload: [{
+        id: 3,
+        name: "third book object in the payload",
+        title: "this is third book in payload objs..",
+        price: 30.99
     }]
 });
 
