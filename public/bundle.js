@@ -72,9 +72,11 @@
 
 var _redux = __webpack_require__(8);
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 // STEP 3 define the reducers
 var reducer = function reducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
     var action = arguments[1];
 
     // if the action type is increment we will update the state, adding the payload
@@ -85,8 +87,9 @@ var reducer = function reducer() {
         //     break;
         case "POST_BOOK":
             // never use push to concatonate b/c push is a mutable method and in Redux you should never mutate the state
-            var books = state.concat(action.payload);
-            return books;
+            //let books = state.books.concat(action.payload);
+            // can also use the spread operator ...
+            return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
             break;
     }
     return state;
@@ -98,7 +101,7 @@ var store = (0, _redux.createStore)(reducer);
 store.subscribe(function () {
     console.log('Current state is: ', store.getState());
     // can look at just the price of an object in the payload from the getState()
-    console.log('Current state is: ', store.getState()[1].price);
+    //console.log('Current state is: ', store.getState()[1].price);
 });
 
 // STEP 2 create and dispatch actions

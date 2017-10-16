@@ -2,7 +2,7 @@
 import { createStore } from 'redux';
 
 // STEP 3 define the reducers
-const reducer = function (state = [], action) {
+const reducer = function (state = { books: [] }, action) {
     // if the action type is increment we will update the state, adding the payload
     // also have to set the initial value of ths state (= 0) or we wont be able to add any payload
     switch (action.type) {
@@ -11,8 +11,9 @@ const reducer = function (state = [], action) {
         //     break;
         case "POST_BOOK":
         // never use push to concatonate b/c push is a mutable method and in Redux you should never mutate the state
-        let books = state.concat(action.payload);
-            return books;
+        //let books = state.books.concat(action.payload);
+        // can also use the spread operator ...
+            return { books: [...state.books, ...action.payload] };
             break;
     }
     return state;
@@ -24,7 +25,7 @@ const store = createStore(reducer);
 store.subscribe(function () {
     console.log('Current state is: ', store.getState());
     // can look at just the price of an object in the payload from the getState()
-    console.log('Current state is: ', store.getState()[1].price);
+    //console.log('Current state is: ', store.getState()[1].price);
 })
 
 // STEP 2 create and dispatch actions
