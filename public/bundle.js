@@ -70,6 +70,8 @@
 "use strict";
 
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _redux = __webpack_require__(8);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -90,6 +92,36 @@ var reducer = function reducer() {
             //let books = state.books.concat(action.payload);
             // can also use the spread operator ...
             return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
+            break;
+
+        case "DELETE_BOOK":
+            // create a copy of the current array of books
+            var currentBooksArray = [].concat(_toConsumableArray(state.books));
+            // determine at which index in books array is the book to delete
+            var indexToDelete = currentBooksArray.findIndex(function (book) {
+                return book.id === action.payload.id;
+            });
+
+            // then use slice to remove the book from the state object at the specified index in the array
+            return {
+                books: [].concat(_toConsumableArray(currentBooksArray.slice(0, indexToDelete)), _toConsumableArray(currentBooksArray.slice(indexToDelete + 1)))
+            };
+            break;
+
+        case "UPDATE_BOOK":
+            // create a copy of the current array of books
+            var currentBookToUpdate = [].concat(_toConsumableArray(state.books));
+            // determine the index in the books array to be updated
+            var indexToUpdate = currentBookToUpdate.findIndex(function (book) {
+                return book.id === action.payload.id;
+            });
+            // create new book object with the new values and with the same array index of the item we want to replace, to do thsi we use spread but can use concat too
+            var newBookToUpdate = _extends({}, currentBookToUpdate[indexToUpdate], {
+                title: action.payload.title
+                // this log shows what the new item has
+            });console.log("newBookToUpdate: ", newBookToUpdate);
+            // use slice to remove the book at the specified index, replace with the new object and concatenate with the other items
+            return { books: [].concat(_toConsumableArray(currentBookToUpdate.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBookToUpdate.slice(indexToUpdate + 1))) };
             break;
     }
     return state;
@@ -134,6 +166,21 @@ store.dispatch({
         title: "this is third book in payload objs..",
         price: 30.99
     }]
+});
+
+// DELETE a book based on id
+store.dispatch({
+    type: "DELETE_BOOK",
+    payload: { id: 1 }
+});
+
+// UPDATE a book details on Payload
+store.dispatch({
+    type: "UPDATE_BOOK",
+    payload: {
+        id: 2,
+        title: "Updated Title"
+    }
 });
 
 /***/ }),
